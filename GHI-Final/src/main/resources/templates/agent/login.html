@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Login - Resilience India Insurance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+        }
+        .login-container { max-width: 450px; width: 100%; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); }
+        .card-header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            text-align: center; 
+            padding: 3rem 2rem 2rem; 
+            border-radius: 20px 20px 0 0;
+        }
+        .logo { font-size: 3rem; margin-bottom: 1rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1);} 50%{transform:scale(1.05);}100%{transform:scale(1);} }
+        .form-control { 
+            border-radius: 15px; 
+            border: 2px solid #e9ecef; 
+            padding: 15px 20px; 
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.25);
+        }
+        .input-group-text { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            border-radius: 15px 0 0 15px;
+        }
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 15px 15px 0;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            border: none; 
+            border-radius: 15px; 
+            padding: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        .btn-outline-primary {
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+        }
+        .divider { position: relative; text-align: center; margin: 20px 0; }
+        .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #dee2e6; }
+        .divider span { background: white; padding: 0 15px; color: #6c757d; }
+        .features { border-radius: 15px; border: none; }
+        .feature-item { display: flex; align-items: center; margin-bottom: 10px; padding: 8px 0; }
+        .agent-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white; padding: 5px 15px; border-radius: 20px;
+            font-size: 0.9rem; margin-bottom: 1rem; display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-sm-10 col-md-8 col-lg-6 col-xl-4">
+            <div class="login-container mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="logo"><i class="fas fa-user-tie"></i></div>
+                        <div class="agent-badge"><i class="fas fa-star me-1"></i> Agent Portal</div>
+                        <h3 class="mb-1">Welcome</h3>
+                        <p class="mb-0 opacity-75">Sign in to your agent account</p>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- ✅ Success Message after registration -->
+                        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span th:text="${successMessage}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form th:action="@{/agent/web/login}" method="post" th:object="${agentLogin}">
+                            <div class="mb-4">
+                                <label for="email" class="form-label"><i class="fas fa-envelope me-2"></i>Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" th:field="*{email}" class="form-control" id="email"
+                                           placeholder="Enter your email" required>
+                                </div>
+                            </div>
+
+							<div class="mb-4">
+							    <label for="password" class="form-label"><i class="fas fa-lock me-2"></i>Password</label>
+							    <div class="input-group">
+							        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+							        <input type="password" th:field="*{password}" class="form-control" id="password"
+							               placeholder="Enter your password" required>
+							        <button class="btn btn-outline-secondary" type="button" id="toggleLoginPassword">
+							            <i class="fas fa-eye"></i>
+							        </button>
+							    </div>
+							</div>
+
+                            <div class="remember-me mb-3 d-flex justify-content-between align-items-center">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                                </div>
+                                <!--a href="#" class="text-primary"><i class="fas fa-key me-1"></i>Forgot Password?</a-->
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                            </button>
+                        </form>
+
+						<!-- Error Message -->
+						<div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+						    <i class="fas fa-exclamation-triangle me-2"></i>
+						    <span th:text="${errorMessage}"></span>
+						    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+
+
+                        <div class="divider text-center my-3"><span>or</span></div>
+
+                        <div class="text-center">
+                            <p>Don't have an agent account?</p>
+                            <a th:href="@{/agent/register}" class="btn btn-outline-primary mt-2">
+                                <i class="fas fa-user-plus me-2"></i>Register as Agent
+                            </a>
+                        </div>
+                        <br>
+                        <div class="text-center">
+                            <p>Are you a Customer?</p>
+                            <a th:href="@{/customer/login}" class="btn btn-outline-primary mt-2">
+                                <i class="fas fa-user-plus me-2"></i>Login as Customer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="features bg-light rounded mt-4 p-3">
+                    <h6 class="text-center mb-3">Agent Benefits</h6>
+                    <div class="feature-item"><i class="fas fa-users text-primary me-2"></i><span>Manage Assigned Customers</span></div>
+                    <div class="feature-item"><i class="fas fa-chart-line text-primary me-2"></i><span>Track Sales Performance</span></div>
+                    <div class="feature-item"><i class="fas fa-sack-dollar text-primary me-2"></i><span>Commission Management</span></div>
+                    <div class="feature-item"><i class="fas fa-headset text-primary me-2"></i><span>24/7 Agent Support</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ✅ Toggle password visibility
+    function togglePasswordVisibility(inputId, toggleBtnId) {
+        const input = document.getElementById(inputId);
+        const toggleBtn = document.getElementById(toggleBtnId).querySelector("i");
+
+        if (input.type === "password") {
+            input.type = "text";
+            toggleBtn.classList.remove("fa-eye");
+            toggleBtn.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            toggleBtn.classList.remove("fa-eye-slash");
+            toggleBtn.classList.add("fa-eye");
+        }
+    }
+
+    document.getElementById("toggleLoginPassword").addEventListener("click", function() {
+        togglePasswordVisibility("password", "toggleLoginPassword");
+    });
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

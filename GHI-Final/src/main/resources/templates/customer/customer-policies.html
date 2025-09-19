@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Policies</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f9fafb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .policy-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .policy-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .policy-status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-expired {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        /* Section toggling */
+        .policy-section {
+            display: none;
+        }
+
+        .policy-section.active {
+            display: block;
+        }
+
+        .btn-toggle {
+            border-radius: 20px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .btn-toggle.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <h2 class="mb-4">My Policies</h2>
+	
+
+	<!-- Go Back Button -->
+	<div class="mb-4">
+	    <a th:href="@{/customer/dashboard}" class="btn btn-outline-secondary">
+	        ⬅ Go Back to Dashboard
+	    </a>
+	</div>
+	
+    <!-- Toggle Buttons -->
+	<div class="btn-group mb-3" role="group">
+	    <a th:href="@{/customer/mypolicies?filter=active}" 
+	       class="btn btn-outline-primary" 
+	       th:classappend="${selectedTab == 'active'} ? ' active'">Active Policies</a>
+
+	    <a th:href="@{/customer/mypolicies?filter=expired}" 
+	       class="btn btn-outline-danger" 
+	       th:classappend="${selectedTab == 'expired'} ? ' active'">Renewal Policies</a>
+	</div>
+
+	<!-- Active Policies -->
+	<div th:if="${selectedTab == 'active'}">
+	    <h4>Active Policies</h4>
+	    <div th:if="${#lists.isEmpty(activePolicies)}" class="text-muted">No active policies.</div>
+
+	    <div th:if="${!#lists.isEmpty(activePolicies)}"
+	         class="d-flex flex-row overflow-auto gap-3 p-2">
+	        <div th:each="policy : ${activePolicies}" 
+	             class="card policy-card flex-shrink-0" style="width: 18rem;">
+	            <div class="card-body">
+					<!--h5 th:text="${policy.policyId}"--><!--/h5-->
+					<p><strong>Policy Name:</strong> <span th:text="${policy.policyName}"></span></p>
+					<p><strong>Premium:</strong> <span th:text="${policy.premiumAmount}"></span></p>
+					<p><strong>Start:</strong> <span th:text="${policy.startDate}"></span></p>
+					<p><strong>Next Premium Due:</strong> <span th:text="${policy.endDate}"></span></p>
+	                <span class="policy-status status-active">Active</span>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- Expired Policies -->
+	<div th:if="${selectedTab == 'expired'}">
+	    <h4>Renewal Due Policies</h4>
+	    <div th:if="${#lists.isEmpty(expiredPolicies)}" class="text-muted">No expired policies.</div>
+
+	    <!-- Only show cards if list is NOT empty -->
+	    <div th:if="${!#lists.isEmpty(expiredPolicies)}"
+	         class="d-flex flex-row overflow-auto gap-3 p-2">
+	        <div th:each="policy : ${expiredPolicies}" 
+	             class="card policy-card flex-shrink-0" style="width: 18rem;">
+	            <div class="card-body">
+					<!--h5 th:text="${policy.policyId}"--><!--/h5-->
+					<p><strong>Policy Name:</strong> <span th:text="${policy.policyName}"></span></p>
+					<p><strong>Premium:</strong> <span th:text="${policy.premiumAmount}"></span></p>
+					<p><strong>Start:</strong> <span th:text="${policy.startDate}"></span></p>
+					<p><strong>Next Premium Due:</strong> <span th:text="${policy.endDate}"></span></p>
+					<span class="policy-status status-expired">Expired</span>
+					<br>
+	                <!-- Renew button -->
+	                <a th:href="@{/renewal}" 
+	                   class="btn btn-warning btn-sm mt-2">
+	                    Renew
+	                </a>
+					<!--button type="button"
+					        class="btn btn-warning btn-sm mt-2"
+					        th:onclick="'goToRenewal(' + ${policy.customerId} + ',' + ${policy.policyId} + ',' + ${policy.premiumAmount} + ')'">
+					    Renew
+					</button-->
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+    <script>
+        const btnActive = document.getElementById("btn-active");
+        const btnExpired = document.getElementById("btn-expired");
+        const activeSection = document.getElementById("active-section");
+        const expiredSection = document.getElementById("expired-section");
+
+        btnActive.addEventListener("click", () => {
+            activeSection.classList.add("active");
+            expiredSection.classList.remove("active");
+            btnActive.classList.add("active");
+            btnExpired.classList.remove("active");
+        });
+
+        btnExpired.addEventListener("click", () => {
+            expiredSection.classList.add("active");
+            activeSection.classList.remove("active");
+            btnExpired.classList.add("active");
+            btnActive.classList.remove("active");
+        });
+		
+		// Save renewal data to localStorage and redirect
+		    //function goToRenewal(customerId, policyId, premiumAmount) {
+		        //const renewalData = { customerId, policyId, amount: premiumAmount };
+		        //localStorage.setItem("renewalData", JSON.stringify(renewalData));
+		        //window.location.href = "/renewal"; // redirect to renewal page
+		    //}
+    </script>
+
+</body>
+</html>

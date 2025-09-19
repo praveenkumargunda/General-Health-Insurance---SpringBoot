@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Registration - Resilience India Insurance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        .card { 
+            border: none; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); 
+        }
+        .card-header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            border-radius: 20px 20px 0 0; 
+            color: white; 
+            text-align: center; 
+            padding: 2rem; 
+        }
+        .agent-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .input-group-text {
+            border-radius: 10px 0 0 10px;
+            background: #f1f3f5;
+            border: 2px solid #e9ecef;
+        }
+        .form-control { 
+            border-radius: 0 10px 10px 0; 
+            border: 2px solid #e9ecef; 
+            padding: 12px 15px; 
+            transition: all 0.3s ease;
+        }
+        .form-control:focus { 
+            border-color: #667eea; 
+            box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.25); 
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            border: none; 
+            border-radius: 10px; 
+            padding: 12px 30px; 
+            font-weight: 600; 
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4); 
+        }
+        .section-header {
+            font-size: 1.2rem;
+            color: #667eea;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .section-header i {
+            margin-right: 8px;
+            color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card">
+                <div class="card-header">
+                    <div class="logo">
+                        <i class="fas fa-user-tie fa-3x mb-3"></i>
+                    </div>
+                    <div class="agent-badge">
+                        <i class="fas fa-star me-1"></i> Agent Registration
+                    </div>
+                    <h3>Join Our Agent Network</h3>
+                    <p class="mb-0">Create Your Agent Account</p>
+                </div>
+                <div class="card-body p-5">
+
+                    <!-- Error -->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <form th:action="@{/agent/web/register}" th:object="${agentRegistration}" method="post" id="registrationForm" novalidate>
+                        
+                        <!-- 👤 Personal Info -->
+                        <div class="section-header"><i class="fas fa-user"></i> Personal Information</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" th:field="*{firstName}" class="form-control" placeholder="First Name" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{firstName}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" th:field="*{lastName}" class="form-control" placeholder="Last Name" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{lastName}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" th:field="*{email}" class="form-control" placeholder="Email" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{email}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" th:field="*{phoneNumber}" class="form-control" placeholder="Phone Number" required maxlength="10">
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{phoneNumber}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input type="date" th:field="*{dateOfBirth}" class="form-control" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{dateOfBirth}"></div>
+                            </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                <input type="number" th:field="*{experienceYears}" class="form-control" placeholder="Experience (in years)" min="0" required>
+                            </div>
+                            <div class="text-danger" th:errors="*{experienceYears}"></div>
+                        </div>
+
+                        <!-- 📍 Address -->
+                        <div class="section-header"><i class="fas fa-map-marker-alt"></i> Address</div>
+                        <div class="mb-3">
+                            <textarea th:field="*{address}" class="form-control" rows="3" placeholder="Full Address" required></textarea>
+                            <div class="validation-message text-danger" th:errors="*{address}"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <input type="text" th:field="*{city}" class="form-control" placeholder="City" required>
+                                <div class="validation-message text-danger" th:errors="*{city}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <select th:field="*{state}" class="form-control" required>
+                                    <option value="">Select State</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Telangana">Telangana</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Odisha">Odisha</option>
+                                </select>
+                                <div class="validation-message text-danger" th:errors="*{state}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" th:field="*{pinCode}" class="form-control" placeholder="PIN Code" maxlength="6" required>
+                                <div class="validation-message text-danger" th:errors="*{pinCode}"></div>
+                            </div>
+                        </div>
+
+                        <!-- 📑 Documents -->
+                        <div class="section-header"><i class="fas fa-id-card"></i> Documents</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <select th:field="*{documentType}" class="form-control" required>
+                                    <option value="">Select Document</option>
+                                    <option value="PAN">PAN Card</option>
+                                    <option value="AADHAR">Aadhar Card</option>
+                                </select>
+                                <div class="validation-message text-danger" th:errors="*{documentType}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" th:field="*{documentNumber}" class="form-control" placeholder="Document Number" required>
+                                <div class="validation-message text-danger" th:errors="*{documentNumber}"></div>
+                            </div>
+                        </div>
+
+                        <!-- 🔒 Password -->
+						<div class="row">
+						    <!-- Password -->
+						    <div class="col-md-6 mb-3">
+						        <div class="input-group">
+						            <input type="password" th:field="*{password}" class="form-control" 
+						                   placeholder="Password (min 8 chars)" required minlength="8" id="passwordField">
+						            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+						                <i class="fas fa-eye"></i>
+						            </button>
+						        </div>
+						        <div class="password-strength bg-secondary mt-2" id="passwordStrength"></div>
+						        <div class="validation-message text-danger" th:errors="*{password}"></div>
+						    </div>
+
+						    <!-- Confirm Password -->
+						    <div class="col-md-6 mb-3">
+						        <div class="input-group">
+						            <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required>
+						            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+						                <i class="fas fa-eye"></i>
+						            </button>
+						        </div>
+						        <div id="passwordMatch" class="validation-message"></div>
+						    </div>
+						</div>
+
+                        <!-- ✅ Terms -->
+                        <div class="col-12 mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#">Terms & Conditions</a> and 
+                                    <a href="#">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <button type="submit" class="btn btn-primary w-100 py-3">
+                                <i class="fas fa-check-circle me-2"></i> Register
+                            </button>
+                        </div>
+
+                        <div class="col-12 text-center">
+                            <p>Already have an account? <a th:href="@{/agent/login}" class="fw-bold text-primary">Login here</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // ✅ Password match check
+    const pwd = document.querySelector('input[name="password"]');
+    const confirmPwd = document.getElementById('confirmPassword');
+    const matchDiv = document.getElementById('passwordMatch');
+
+    pwd.addEventListener('input', checkMatch);
+    confirmPwd.addEventListener('input', checkMatch);
+
+    function checkMatch() {
+        if (!pwd.value || !confirmPwd.value) { 
+            matchDiv.innerHTML = ''; 
+            return; 
+        }
+        if (pwd.value !== confirmPwd.value) {
+            matchDiv.innerHTML = 'Passwords do not match';
+            matchDiv.className = 'validation-message text-danger';
+        } else {
+            matchDiv.innerHTML = 'Passwords match';
+            matchDiv.className = 'validation-message text-success';
+        }
+    }
+</script>
+
+<script>
+    // ✅ Toggle Password Visibility
+    function togglePasswordVisibility(inputId, toggleBtnId) {
+        const input = document.getElementById(inputId);
+        const toggleBtn = document.getElementById(toggleBtnId).querySelector("i");
+
+        if (input.type === "password") {
+            input.type = "text";
+            toggleBtn.classList.remove("fa-eye");
+            toggleBtn.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            toggleBtn.classList.remove("fa-eye-slash");
+            toggleBtn.classList.add("fa-eye");
+        }
+    }
+
+    document.getElementById("togglePassword").addEventListener("click", function() {
+        togglePasswordVisibility("passwordField", "togglePassword");
+    });
+
+    document.getElementById("toggleConfirmPassword").addEventListener("click", function() {
+        togglePasswordVisibility("confirmPassword", "toggleConfirmPassword");
+    });
+</script>
+
+
+<!-- ✅ SweetAlert2 Success Popup -->
+<script th:if="${successMessage}">
+    Swal.fire({
+        icon: 'success',
+        title: 'Registration Successful!',
+        text: [[${successMessage}]],
+        confirmButtonText: 'Go to Login',
+        confirmButtonColor: '#198754',
+        background: '#f8f9fa',
+        color: '#212529'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/agent/login';
+        }
+    });
+</script>
+</body>
+</html>

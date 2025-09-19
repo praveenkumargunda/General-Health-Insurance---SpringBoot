@@ -1,0 +1,156 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 1000px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #ffcc00;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    form input, form select, form textarea, form button {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    form input, form select, form textarea {
+      flex: 1;
+      min-width: 180px;
+      background: #fff;
+      color: #333;
+    }
+
+    form button {
+      background: #ffcc00;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    form button:hover {
+      background: #ffaa00;
+      transform: scale(1.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      color: #333;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 14px;
+      text-align: center;
+    }
+
+    table th {
+      background: #2a5298;
+      color: #fff;
+    }
+
+    table tr:hover {
+      background: rgba(42, 82, 152, 0.1);
+      transition: 0.3s;
+    }
+
+    table button {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    table button:hover {
+      background: #c0392b;
+      transform: scale(1.05);
+    }
+    .carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 10px;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 8px;
+}
+.carousel::-webkit-scrollbar-thumb {
+  background: #ffcc00;
+  border-radius: 10px;
+}
+
+.policy-card {
+  min-width: 280px;
+  background: #fff;
+  color: #333;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.policy-card:hover {
+  transform: translateY(-5px);
+}
+
+.policy-card h3 {
+  margin-top: 0;
+  color: #2a5298;
+}
+
+.policy-card p {
+  margin: 6px 0;
+}
+
+.policy-card a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #e74c3c;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.policy-card a:hover {
+  background: #c0392b;
+}
+    

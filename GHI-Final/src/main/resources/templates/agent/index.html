@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>General Health Insurance</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 85%;
+      max-width: 1100px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #00e5ff;
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 12px rgba(0,229,255,0.6);
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    form input, form select, form button {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    form input, form select {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    form button {
+      background: linear-gradient(135deg,#ff416c,#ff4b2b);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    form button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255,65,108,0.6);
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 25px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 20px 10px;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .policy-card {
+      width: 300px;             
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .policy-card.focus {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px #00e5ff;
+      border: 1px solid #00e5ff;
+    }
+
+    .policy-card h3 {
+      margin-top: 0;
+      color: #ffcc70;
+      font-size: 1.3rem;
+      text-shadow: 0 0 10px rgba(255,204,112,0.6);
+    }
+
+    .policy-card p {
+      margin: 5px 0;
+    }
+
+    .description {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      margin-top: 10px;
+      color: #e0e0e0;
+    }
+
+    .description.open {
+      max-height: 200px;
+    }
+
+    .toggle-btn {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg,#ff416c,#ff4b2b);
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,65,108,0.6);
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,229,255,0.7);
+      color: #000;
+      border: none;
+      font-size: 28px;
+      padding: 10px 14px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10;
+      transition: all 0.3s;
+    }
+
+    .arrow:hover {
+      background: #00e5ff;
+      box-shadow: 0 0 15px #00e5ff;
+    }
+
+    .arrow.left { left: -15px; }
+    .arrow.right { right: -15px; }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>General Health Insurance</h1>
+
+    <form th:action="@{/policies}" th:object="${policy}" method="post" autocomplete="off">
+      <input type="text" th:field="*{name}" placeholder="Policy Name" required/>
+      <input type="number" step="0.01" th:field="*{coverageAmount}" placeholder="Coverage Amount" required/>
+      <input type="number" step="0.01" th:field="*{premiumAmount}" placeholder="Premium Amount" required/>
+      <select th:field="*{term}" required>
+        <option value="">--Select Term--</option>
+        <option value="HALF_YEARLY">Half Yearly</option>
+        <option value="YEARLY">Yearly</option>
+      </select>
+      <input type="text" th:field="*{description}" placeholder="Description (optional)"/>
+      <button type="submit">Create Policy</button>
+    </form>
+
+    <h2>Available Policies</h2>
+    <div class="carousel-wrapper">
+      <button class="arrow left" onclick="moveCarousel(-1)">&#10094;</button>
+      <div class="carousel" id="policyCarousel">
+
+        <div th:if="${policies.isEmpty()}">
+          <div class="policy-card">
+            <p>No policies found.</p>
+          </div>
+        </div>
+
+        <div class="policy-card" th:each="p : ${policies}" th:unless="${policies.isEmpty()}">
+          <h3 th:text="${p.name}"></h3>
+          <p><strong>ID:</strong> <span th:text="${p.id}"></span></p>
+          <p><strong>Coverage:</strong> ₹<span th:text="${p.coverageAmount}"></span></p>
+          <p><strong>Premium:</strong> ₹<span th:text="${p.premiumAmount}"></span></p>
+          <p><strong>Term:</strong> <span th:text="${p.term}"></span></p>
+          
+          <div class="description">
+            <p th:text="${p.description}"></p>
+          </div>
+          <div class="toggle-btn" onclick="toggleDescription(this)">View Description</div>
+          <a th:href="@{'/policies/delete/' + ${p.id}}" class="toggle-btn" style="margin-top:8px; background: #e74c3c;">Delete</a>
+        </div>
+
+      </div>
+      <button class="arrow right" onclick="moveCarousel(1)">&#10095;</button>
+    </div>
+  </div>
+
+  <script>
+    const carousel = document.getElementById("policyCarousel");
+
+    function moveCarousel(direction) {
+      const cardWidth = carousel.querySelector(".policy-card").offsetWidth + 25;
+      carousel.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
+      updateFocus();
+    }
+
+    function updateFocus() {
+      const cards = document.querySelectorAll(".policy-card");
+      let mid = carousel.scrollLeft + carousel.offsetWidth / 2;
+      cards.forEach(card => card.classList.remove("focus"));
+
+      let closest = null, minDist = Infinity;
+      cards.forEach(card => {
+        let center = card.offsetLeft + card.offsetWidth / 2;
+        let dist = Math.abs(center - mid);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = card;
+        }
+      });
+      if (closest) closest.classList.add("focus");
+    }
+
+    function toggleDescription(button) {
+      const desc = button.previousElementSibling;
+      desc.classList.toggle("open");
+      button.textContent = desc.classList.contains("open") ? "Hide Description" : "View Description";
+    }
+
+    carousel.addEventListener("scroll", updateFocus);
+    window.addEventListener("load", () => { updateFocus(); });
+  </script>
+</body>
+</html>

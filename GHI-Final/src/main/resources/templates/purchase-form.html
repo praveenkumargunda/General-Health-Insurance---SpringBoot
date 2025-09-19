@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purchase Policy</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+body { 
+  background: #f8f9fa; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar { 
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 15px;
+  padding: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+}
+
+.btn-outline-primary {
+  border: 2px solid #667eea;
+  color: #667eea;
+  border-radius: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: white;
+}
+
+.form-container { 
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin: auto;
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+label { 
+  display: block; 
+  margin: 20px 0 8px;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+input { 
+  width: 100% !important; 
+  padding: 15px !important; 
+  margin-bottom: 15px !important;
+  border: 2px solid #e9ecef !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  background: #f8f9fa !important;
+  box-sizing: border-box !important;
+}
+
+input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  background: white;
+}
+
+input:hover {
+  border-color: #667eea;
+  background: white;
+}
+
+select.form-select {
+  width: 100% !important; 
+  padding: 15px !important; 
+  margin-bottom: 15px !important;
+  border: 2px solid #e9ecef !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  background: #f8f9fa !important;
+  box-sizing: border-box !important;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 15px center;
+  background-repeat: no-repeat;
+  background-size: 16px 12px;
+  padding-right: 50px;
+}
+
+select.form-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  background: white;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+select.form-select:hover {
+  border-color: #667eea;
+  background: white;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+select.form-select option {
+  padding: 10px;
+  background: white;
+  color: #495057;
+}
+
+.form-icon {
+  color: #667eea;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-group i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 10;
+}
+
+.input-group input {
+  padding-left: 50px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.alert-custom {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e85 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+	<div style="position: absolute; top: 20px; right: 30px;">
+	    <a href="/agent/dashboard" style="text-decoration: none; font-weight: 600; color: #667eea;">
+	        <i class="fas fa-home me-2"></i>Go to Dashboard
+	    </a>
+	</div>
+<div class="form-container">
+<h2><i class="fas fa-shield-alt form-icon"></i>Purchase Policy</h2>
+
+<div th:if="${errorMessage}" class="alert alert-custom">
+<i class="fas fa-exclamation-triangle me-2"></i>
+<span th:text="${errorMessage}"></span>
+</div>
+
+<form th:action="@{/agent/purchase/payment}" method="post" th:object="${purchaseRequest}">
+<div class="input-group">
+  <label for="customerId">Select Customer:</label>
+  <select id="customerId" th:field="*{customerId}" required class="form-select">
+    <option value="" disabled selected>Select Customer</option>
+    <option th:each="customer : ${assignedCustomers}" 
+            th:value="${customer.id}" 
+            th:text="${customer.firstName + ' ' + customer.lastName + ' (' + customer.id + ')'}">
+    </option>
+  </select>
+</div>
+
+<div class="input-group">
+  <label for="policyId">Select Policy:</label>
+  <select id="policyId" th:field="*{policyId}" required class="form-select">
+    <option value="" disabled selected>Select Policy</option>
+    <option th:each="policy : ${availablePolicies}" 
+            th:value="${policy.id}" 
+            th:text="${policy.name + ' (' + policy.id + ')'}">
+    </option>
+  </select>
+</div>
+
+
+<button type="submit" class="btn btn-primary">
+<i class="fas fa-credit-card me-2"></i>Proceed to Payment
+</button>
+</form>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

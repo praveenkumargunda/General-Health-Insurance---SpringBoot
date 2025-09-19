@@ -1,0 +1,95 @@
+/* Full page background */
+body {
+    background: url("https://media.istockphoto.com/id/1637863898/vector/healthcare-and-innovative-technology-apps-for-medical-exams-and-online-consultation-concept.jpg?s=612x612&w=0&k=20&c=yzhgqtfnhrYXe3VJaCc0OAphHvSQLEmoKZSfn7HKbzg=") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Overlay to make text readable */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: -1;
+}
+
+/* Centered container */
+.container {
+    max-width: 700px;
+}
+
+/* Card styling */
+.card {
+    border-radius: 20px;
+    border: none;
+    background: #ffffffcc; /* semi-transparent */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Headings */
+h3, h2, h1 {
+    font-weight: bold;
+    text-align: center;
+    color: #0d6efd;
+}
+
+/* Form labels */
+.form-label {
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 10px 18px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #084298;
+    transform: scale(1.03);
+}
+
+.btn-success:hover {
+    transform: scale(1.03);
+}
+
+/* Table styling */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: #0d6efd;
+    color: white;
+    text-align: center;
+}
+
+.table tbody td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Navbar styling */
+.navbar {
+    background: rgba(13, 110, 253, 0.9);
+}
+
+.navbar-brand, .nav-link {
+    color: white !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}

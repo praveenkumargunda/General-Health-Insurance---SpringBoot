@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Resilience India Insurance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        .navbar-brand { font-size: 1.5rem; font-weight: 700; color: white !important; }
+        .sidebar { background: white; min-height: calc(100vh - 76px); box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); position: sticky; top: 76px; }
+        .sidebar .nav-link { color: #495057; padding: 15px 20px; border-radius: 0; transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: #f8f9fa; color: #667eea; border-left-color: #667eea; }
+        .dashboard-card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; }
+        .dashboard-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); }
+        .stats-card { height: 160px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stats-card .card-body { padding: 2rem; }
+        .stats-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 0; }
+        .stats-label { font-size: 0.9rem; opacity: 0.9; }
+        .welcome-card { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
+        .quick-action-btn { border-radius: 10px; padding: 12px 20px; border: none; transition: all 0.3s ease; font-weight: 600; }
+        .quick-action-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        .profile-section { background: white; border-radius: 15px; padding: 2rem; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; margin-bottom: 1rem; }
+        .policy-card { background: white; border-radius: 15px; border-left: 4px solid #667eea; transition: all 0.3s ease; }
+        .policy-card:hover { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); }
+        .policy-status { font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-expired { background: #f8d7da; color: #721c24; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .main-content { padding: 2rem; }
+        .page-title { color: #495057; margin-bottom: 2rem; font-weight: 600; }
+        .notification-badge { background: #dc3545; color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.75rem; position: absolute; top: -5px; right: -5px; }
+        .dropdown-menu { border: none; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        .dropdown-item:hover { background: #f8f9fa; color: #667eea; }
+        .activity-item { padding: 1rem; border-left: 3px solid #e9ecef; margin-bottom: 1rem; background: white; border-radius: 0 10px 10px 0; }
+        .activity-item:hover { border-left-color: #667eea; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); }
+        .activity-date { font-size: 0.85rem; color: #6c757d; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/customer/dashboard}">
+                <i class="fas fa-shield-alt me-2"></i> Resilience India
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <!-- Notifications -->
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationsDropdown"
+                           role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center" href="#">View All</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Profile -->
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span th:text="${customer.firstName}">Customer</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="showProfile()"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/customer/web/logout}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0">
+                <div class="sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" onclick="showDashboard()"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+						<a class="nav-link" th:href="@{/policies/customer}">
+						    <i class="fas fa-file-contract me-2"></i>Policies
+						</a>
+						<a class="nav-link" th:href="@{/customer/mypolicies}">
+						            <i class="fas fa-clipboard-list me-2"></i>My Policies
+						        </a>
+						<a class="nav-link" th:href="@{/renewal}">
+												    <i class="fas fa-file-contract me-2"></i>Renewals
+												</a>
+						<a class="nav-link" th:href="@{/history}">
+												    <i class="fas fa-file-contract me-2"></i>Payments
+						</a>
+						<a class="nav-link" href="#" onclick="showProfile()"><i class="fas fa-user me-2"></i>Profile</a>
+                        <a class="nav-link" href="#" onclick="showSupport()"><i class="fas fa-headset me-2"></i>Support</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Area -->
+            <div class="col-md-9 col-lg-10">
+                <div class="main-content">
+
+                    <!-- Dashboard Section -->
+                    <div id="dashboardContent" class="content-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="page-title">Dashboard</h2>
+                            <div class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>
+                                <span id="currentDate"></span>
+                            </div>
+                        </div>
+
+                        <!-- Welcome -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="card dashboard-card welcome-card fade-in">
+                                    <div class="card-body p-4">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-8">
+                                                <h3 class="mb-2">Welcome back, <span th:text="${customer.firstName}">Customer</span>!</h3>
+                                                <p class="mb-3 opacity-90">Manage your insurance policies, claims, and account settings all in one place.</p>
+												<a class="btn btn-primary" th:href="@{/policies/customer}">
+												    <i class="fas fa-plus me-1"></i>View Policy
+												</a>
+												<a th:href="@{/customer/mypolicies?filter=expired}" 
+												   class="btn btn-warning ms-2">View Renewals</a>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <i class="fas fa-shield-alt" style="font-size: 4rem; opacity: 0.3;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Example Stats -->
+						<div class="row mb-4">
+						    <!-- Active Policies -->
+						    <div class="col-md-4 mb-3">
+						        <div class="card dashboard-card stats-card fade-in">
+						            <div class="card-body text-center">
+						                <div class="stats-number" th:text="${activePolicyCount != null ? activePolicyCount : 0}">0</div>
+						                <div class="stats-label">Active Policies</div>
+						                <i class="fas fa-file-contract mt-2" style="font-size: 2rem; opacity: 0.5;"></i>
+						            </div>
+						        </div>
+						    </div>
+
+						    <!-- Expired Policies -->
+						    <div class="col-md-4 mb-3">
+						        <div class="card dashboard-card fade-in" style="background: linear-gradient(135deg, #f87171 0%, #dc2626 100%); color: white;">
+						            <div class="card-body text-center">
+						                <div class="stats-number" th:text="${expiredPolicyCount != null ? expiredPolicyCount : 0}">0</div>
+						                <div class="stats-label">Renewals Due</div>
+						                <i class="fas fa-exclamation-triangle mt-2" style="font-size: 2rem; opacity: 0.7;"></i>
+						            </div>
+						        </div>
+						    </div>
+
+						    <!-- Renewals Due Soon -->
+						    <div class="col-md-4 mb-3">
+						        <div class="card dashboard-card fade-in" style="background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: black;">
+						            <div class="card-body text-center">
+						                <div class="stats-number" th:text="${renewalsDueSoon != null ? renewalsDueSoon : 0}">0</div>
+						                <div class="stats-label">Renewals Due Soon</div>
+						                <i class="fas fa-clock mt-2" style="font-size: 2rem; opacity: 0.7;"></i>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+
+                    </div>
+
+					<!-- Profile Section -->
+					<div id="profileContent" class="content-section" style="display: none;">
+					    <h2 class="page-title">My Profile</h2>
+					    <form th:action="@{/customer/profile/update}" th:object="${customer}" method="post" class="row">
+					        <div class="col-md-4 mb-4">
+					            <div class="profile-section text-center">
+					                <div class="profile-avatar mx-auto">
+					                    <span th:text="${#strings.substring(customer.firstName,0,1)} + ${#strings.substring(customer.lastName,0,1)}">CU</span>
+					                </div>
+									<p class="text-muted" th:text="'Customer ID: ' + ${customer.id}"></p>
+					                <h4 th:text="${customer.fullName}">Customer Name</h4>
+					                <p class="text-muted" th:text="${customer.email}">email@example.com</p>
+					                <p class="text-muted"><i class="fas fa-phone me-1"></i>
+					                    <input type="text" th:field="*{phoneNumber}" class="form-control text-center">
+					                </p>
+					                <button type="submit" class="btn btn-success">Save Changes</button>
+					            </div>
+					        </div>
+
+					        <div class="col-md-8">
+					            <div class="profile-section">
+					                <h5 class="mb-4">Personal Information</h5>
+					                <div class="row mb-3">
+					                    <div class="col-md-6">
+					                        <label class="form-label">First Name</label>
+					                        <input type="text" class="form-control" th:field="*{firstName}">
+					                    </div>
+					                    <div class="col-md-6">
+					                        <label class="form-label">Last Name</label>
+					                        <input type="text" class="form-control" th:field="*{lastName}">
+					                    </div>
+					                </div>
+					                <div class="row mb-3">
+					                    <div class="col-md-6">
+					                        <label class="form-label">Date of Birth</label>
+					                        <input type="date" class="form-control" th:field="*{dateOfBirth}">
+					                    </div>
+					                    <div class="col-md-6">
+					                        <label class="form-label">Gender</label>
+					                        <input type="text" class="form-control" th:field="*{gender}">
+					                    </div>
+					                </div>
+					                <div class="mb-3">
+					                    <label class="form-label">Address</label>
+					                    <textarea class="form-control" rows="3" th:field="*{address}"></textarea>
+					                </div>
+					                <div class="row mb-3">
+					                    <div class="col-md-4"><label class="form-label">City</label><input type="text" class="form-control" th:field="*{city}"></div>
+					                    <div class="col-md-4"><label class="form-label">State</label><input type="text" class="form-control" th:field="*{state}"></div>
+					                    <div class="col-md-4"><label class="form-label">PIN Code</label><input type="text" class="form-control" th:field="*{pinCode}"></div>
+					                </div>
+					            </div>
+					        </div>
+					    </form>
+					</div>
+                    <!-- Other placeholder sections -->
+                    
+                   
+                    <div id="supportContent" class="content-section" style="display: none;">
+    <h2 class="page-title">Support</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card dashboard-card fade-in">
+                <div class="card-body">
+                    <h5 class="card-title">Your Assigned Agent</h5>
+                    <p class="card-text"><strong>Name:</strong> <span th:text="${customer.agent.fullName}">Agent Name</span></p>
+                    <p class="card-text"><strong>Email:</strong> <span th:text="${customer.agent.email}">agent@example.com</span></p>
+                    <p class="card-text"><strong>Phone:</strong> <span th:text="${customer.agent.phoneNumber}">+91 9123456789</span></p>
+                    <p class="card-text"><strong>Experience:</strong> <span th:text="${customer.agent.experienceYears}">5</span> years</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card dashboard-card fade-in">
+                <div class="card-body">
+                    <h5 class="card-title">Need Help?</h5>
+                    <p class="card-text">You can reach out to your agent for any assistance regarding policies, claims, or payments.</p>
+                    <a th:href="'mailto:' + ${customer.agent.email}" class="btn btn-primary">Email Agent</a>
+                    <a th:href="'tel:' + ${customer.agent.phoneNumber}" class="btn btn-outline-primary ms-2">Call Agent</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-IN', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+        });
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+        function showDashboard() { showSection('dashboardContent'); }
+        function showClaims() { showSection('renewalContent'); }
+        function showPayments() { showSection('paymentsContent'); }
+        function showProfile() { showSection('profileContent'); }
+        function showSupport() { showSection('supportContent'); }
+    </script>
+</body>
+</html>

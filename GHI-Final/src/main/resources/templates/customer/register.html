@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration - Resilience India Insurance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+        .card-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0; color: white; text-align: center; padding: 2rem; }
+        .form-control { border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; }
+        .form-control:focus { border-color: #667eea; box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.25); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 10px; padding: 12px 30px; font-weight: 600; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .input-group-text { background: transparent; border: 2px solid #e9ecef; border-right: none; color: #667eea; }
+        .input-group .form-control { border-left: none; }
+        .validation-message { font-size: 0.875rem; margin-top: 0.25rem; }
+        .password-strength { height: 5px; border-radius: 3px; transition: all 0.3s ease; }
+    </style>
+</head>
+<body>
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="logo">
+                        <i class="fas fa-shield-alt"></i> Resilience India
+                    </div>
+                    <p class="mb-0">Create Your Insurance Account</p>
+                </div>
+                <div class="card-body p-5">
+
+                    <!-- ✅ Success -->
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${successMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- ✅ Error -->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <form th:action="@{/customer/web/register}" th:object="${customerRegistration}" method="post" id="registrationForm" novalidate>
+                        <div class="row">
+
+                            <!-- Personal Information -->
+                            <div class="col-12"><h5 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Personal Information</h5></div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First Name *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" id="firstName" th:field="*{firstName}" class="form-control" placeholder="Enter first name" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{firstName}"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last Name *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" id="lastName" th:field="*{lastName}" class="form-control" placeholder="Enter last name" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{lastName}"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="Enter email" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{email}"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" placeholder="10-digit number" required maxlength="10">
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{phoneNumber}"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="dateOfBirth" class="form-label">Date of Birth *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" class="form-control" required>
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{dateOfBirth}"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="gender" class="form-label">Gender *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+									<select id="gender" th:field="*{gender}" class="form-control" required>
+									    <option value="">Select Gender</option>
+									    <option value="Male">Male</option>
+									    <option value="Female">Female</option>
+									    <option value="Other">Other</option>
+									</select>
+
+                                </div>
+                                <div class="validation-message text-danger" th:errors="*{gender}"></div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-12 mt-4"><h5 class="text-primary mb-3"><i class="fas fa-map-marker-alt me-2"></i>Address Information</h5></div>
+
+                            <div class="col-12 mb-3">
+                                <label for="address" class="form-label">Full Address *</label>
+                                <textarea id="address" th:field="*{address}" class="form-control" rows="3" placeholder="Enter complete address" required></textarea>
+                                <div class="validation-message text-danger" th:errors="*{address}"></div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="city" class="form-label">City *</label>
+                                <input type="text" id="city" th:field="*{city}" class="form-control" placeholder="Enter city" required>
+                                <div class="validation-message text-danger" th:errors="*{city}"></div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="state" class="form-label">State *</label>
+								<select id="state" th:field="*{state}" class="form-control" required>
+								    <option value="">Select State</option>
+								    <option value="Tamil Nadu">Tamil Nadu</option>
+								    <option value="Karnataka">Karnataka</option>
+								    <option value="Kerala">Kerala</option>
+								    <option value="Andhra Pradesh">Andhra Pradesh</option>
+								    <option value="Telangana">Telangana</option>
+								    <option value="Maharashtra">Maharashtra</option>
+								    <option value="Gujarat">Gujarat</option>
+								    <option value="Rajasthan">Rajasthan</option>
+								    <option value="Delhi">Delhi</option>
+								</select>
+
+                                <div class="validation-message text-danger" th:errors="*{state}"></div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="pinCode" class="form-label">PIN Code *</label>
+                                <input type="text" id="pinCode" th:field="*{pinCode}" class="form-control" placeholder="6-digit PIN" required maxlength="6">
+                                <div class="validation-message text-danger" th:errors="*{pinCode}"></div>
+                            </div>
+
+                            <!-- Security -->
+                            <div class="col-12 mt-4"><h5 class="text-primary mb-3"><i class="fas fa-lock me-2"></i>Security</h5></div>
+
+                            <div class="col-12 mb-3">
+                                <label for="password" class="form-label">Password *</label>
+                                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Create a password" required minlength="8">
+                                <div class="password-strength bg-secondary mt-2" id="passwordStrength"></div>
+                                <div class="validation-message text-danger" th:errors="*{password}"></div>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required>
+                                <div id="passwordMatch" class="validation-message"></div>
+                            </div>
+							
+							<div class="col-12 mb-3">
+							    <label for="favouriteColour" class="form-label">Favourite Colour *</label>
+							    <div class="input-group">
+							        <span class="input-group-text"><i class="fas fa-palette"></i></span>
+							        <input type="text" id="favouriteColour" th:field="*{favouriteColour}" 
+							               class="form-control" placeholder="Enter your favourite colour" required>
+							    </div>
+							    <div class="validation-message text-danger" th:errors="*{favouriteColour}"></div>
+							</div>
+
+
+                            <!-- Terms -->
+                            <div class="col-12 mb-4">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                                    <label class="form-check-label" for="agreeTerms">
+                                        I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <button type="submit" class="btn btn-primary w-100 py-3">
+                                    <i class="fas fa-user-plus me-2"></i> Create Account
+                                </button>
+                            </div>
+
+                            <div class="col-12 text-center">
+                                <p>Already have an account? <a th:href="@{/customer/login}" class="fw-bold text-primary">Login here</a></p>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Basic password match check
+    const pwd = document.getElementById('password');
+    const confirmPwd = document.getElementById('confirmPassword');
+    const matchDiv = document.getElementById('passwordMatch');
+    pwd.addEventListener('input', checkMatch);
+    confirmPwd.addEventListener('input', checkMatch);
+
+    function checkMatch() {
+        if (!pwd.value || !confirmPwd.value) { matchDiv.innerHTML = ''; return; }
+        if (pwd.value !== confirmPwd.value) {
+            matchDiv.innerHTML = '<i class="fas fa-times text-danger"></i> Passwords do not match';
+            matchDiv.className = 'validation-message text-danger';
+        } else {
+            matchDiv.innerHTML = '<i class="fas fa-check text-success"></i> Passwords match';
+            matchDiv.className = 'validation-message text-success';
+        }
+    }
+</script>
+</body>
+</html>
