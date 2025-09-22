@@ -9,3 +9,6 @@ And then the password is bicrypted here. After entering that row the user creden
 username : admin, password : admin123 
 after entering these details now you can either create(register) or login as agent.
 And also look into application.properties file and change them according to your database.
+
+Note : When you try to run this open customer login in one browser and agent login in another browser like do them in 2 dufferent chrome browsers or use 1 chrome and other one as edge or firefox.
+As we used session storage also.. using the both logins in same browser will make clumsiness in data.
