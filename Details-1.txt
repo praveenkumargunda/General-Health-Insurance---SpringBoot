@@ -1,0 +1,30 @@
+Hello everyone.................. 
+This is a General Health Insurance project based on springBoot
+Technilogies used : 
+FrontEnd : HTML,CSS,JS,Bootstrap and Thymleaf 
+Thymeleaf --> server-side template engine used for rendering dynamic HTML content.
+BackEnd : SpringBoot
+
+So, our project has 2 logins -- one is agent login and other is customer login 
+When we register and login s customer, automatically an agent will be assigned to that particular customer to take care of them and their policies.
+so, the fuctionalities we implemented are :
+Customer registration and login
+Agent registartion and login
+Policies creation
+Purchasing policies
+Premium renewals(premium is like the amount you pay for every 6 months/1 year time period)
+Ex: If the policy tenure is of 5 years and set like renewal option to 1 year, then the customer needs to pay 5 premiums.. so after completing one premium.. the staus will be expired and when ever customer 
+pays another premium by renewlas then again the policy staus will be set to active.
+
+---our flow will be like :
+A customer will login through our system and there will be an agent assigned to them and agent can create polices and simultaneously customer will be able to view all the policies created by the agent.
+Now whether on the policies created or if customer wants a new one they can contact the agent and tell them the requiements, then agent will create the policy as mentioned.
+And then the assigned agent will buy the policy told by the customer on their behalf and pay it and buy the policy. And the renewal period will be set to 6 months or 1 year.
+After completing the timen now customer them selves acn be able to renew theor premium by entering the details and pay and then continue with theor policy.
+And if customer wnats to canc el the plan at any time, they can contact the agent and agent will do the necessary things.
+Customer then can be able to view all the active policies and even expired policies in theor dashboard and can also view payment history of their polices clearly in payments section in dashboard.
+Agent will not be bale to deal with the renewals part. customers themselves will do them. And customers can't be able to pay other customers renewals. And they can't be able to view other's payment history also.
+But agent can be able to view all customers payment histories. But can be able to only buy policies for the assigned customers only.. It is buying the policy not renewals.. Renewals will be done only after 
+particular premium of the policy is expired.
+
+  
