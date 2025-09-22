@@ -1,1 +1,1 @@
-This is project related to General Helath Insurance and it is a spring boot project
+Health Insurance Management System using Spring Boot & Thymeleaf with Agent–Customer workflows, policy handling, and premium renewals.
