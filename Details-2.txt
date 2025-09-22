@@ -1,0 +1,11 @@
+This project has two logins - customer and agent.
+Anyone can login as customer, but when you try to login as agent you will be getting some credentilas to enter.
+please register as agent before creating a customer .. so that you will be having a assigned agent when you register and login as customer.
+For that a small thing is needed to be done. As the tables get created automatically, you need to add one row in portal_users table for that -- 
+INSERT INTO portal_users (username, password, role) VALUES
+('admin', '$2a$10$J4ap2kkZNMWzV4CPt7Is1eBLOj8A294GUyZVSBKBCw7AuuhVAu4Wm', 'ROLE_AGENT_ADMIN')
+Enter this in MYSQL or OracleDB whatever it is.
+And then the password is bicrypted here. After entering that row the user credentials will be like :
+username : admin, password : admin123 
+after entering these details now you can either create(register) or login as agent.
+And also look into application.properties file and change them according to your database.
